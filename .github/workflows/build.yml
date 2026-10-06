@@ -33,7 +33,10 @@ jobs:
             libtool \
             pkg-config \
             zlib1g-dev \
-            openjdk-17-jdk
+            cmake \
+            ninja-build \
+            gfortran \
+            lld
 
       - name: Install Buildozer and Dependencies
         run: |
