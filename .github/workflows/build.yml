@@ -39,14 +39,18 @@ jobs:
           pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Accept Android SDK Licenses & Install Build-Tools
+      - name: Pre-accept Buildozer SDK Licenses
         run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "build-tools;34.0.0" "platforms;android-33" || true
+          mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
+          echo -e "\n2433370235063092619c5220758703070d289d92\nd56f5187479451eabf01fb78af6dfcb131a6481e\n2433370235063092619c5220758703070d289d92" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
+          echo -e "\n84831b9402116e2670a46da3ff7acb3a4eb023a7" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-preview-license
+          echo -e "\nd9058fa0 fine" > ~/.buildozer/android/platform/android-sdk/licenses/android-googletv-license
+          echo -e "\n601007b94784f6376450d10805691178d0285230" > ~/.buildozer/android/platform/android-sdk/licenses/mips-android-sysimage-license
 
       - name: Build with Buildozer
         run: |
+          buildozer android debug || true
+          yes | ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
           buildozer android debug
 
       - name: Upload APK Artifact
