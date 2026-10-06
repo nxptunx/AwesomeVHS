@@ -39,6 +39,11 @@ jobs:
           pip install --upgrade pip
           pip install buildozer cython
 
+      - name: Accept Android SDK Licenses
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
+
       - name: Build with Buildozer
         run: |
           buildozer android debug
@@ -48,4 +53,3 @@ jobs:
         with:
           name: AwesomeVHS-debug-apk
           path: bin/*.apk
-
