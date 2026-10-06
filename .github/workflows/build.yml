@@ -21,22 +21,23 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            patch \
             build-essential \
             ccache \
             git \
             libffi-dev \
             libssl-dev \
-            zip \
-            unzip \
-            autoconf \
             libtool \
+            autoconf \
+            automake \
+            m4 \
             pkg-config \
             zlib1g-dev \
             cmake \
             ninja-build \
             gfortran \
-            lld
+            lld \
+            zip \
+            unzip
 
       - name: Install Buildozer and Dependencies
         run: |

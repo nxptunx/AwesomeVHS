@@ -19,7 +19,7 @@ version = 0.1
 
 # (list) Application requirements
 # Added numpy and opencv-python for live camera frame manipulation
-requirements = python3,kivy,numpy,opencv-python
+requirements = python3,kivy,numpy,opencv
 
 # (str) Supported orientations
 orientation = portrait
