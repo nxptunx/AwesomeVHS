@@ -32,25 +32,31 @@ jobs:
             autoconf \
             libtool \
             pkg-config \
-            zlib1g-dev
+            zlib1g-dev \
+            openjdk-17-jdk
 
       - name: Install Buildozer and Dependencies
         run: |
           pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Pre-accept Buildozer SDK Licenses
+      - name: Bootstrap Buildozer SDK & Cmdline Tools
         run: |
-          mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
-          echo -e "\n2433370235063092619c5220758703070d289d92\nd56f5187479451eabf01fb78af6dfcb131a6481e\n2433370235063092619c5220758703070d289d92" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
-          echo -e "\n84831b9402116e2670a46da3ff7acb3a4eb023a7" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-preview-license
-          echo -e "\nd9058fa0 fine" > ~/.buildozer/android/platform/android-sdk/licenses/android-googletv-license
-          echo -e "\n601007b94784f6376450d10805691178d0285230" > ~/.buildozer/android/platform/android-sdk/licenses/mips-android-sysimage-license
+          # 1. Ensure Buildozer SDK directory structure exists
+          mkdir -p ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest
+          
+          # 2. Copy cmdline-tools from GitHub runner system SDK
+          cp -r $ANDROID_HOME/cmdline-tools/latest/* ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/
+          
+          # 3. Create legacy symlink so p4a legacy checks pass
+          mkdir -p ~/.buildozer/android/platform/android-sdk/tools/bin
+          ln -sf ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
+
+          # 4. Accept all SDK licenses directly in Buildozer context
+          yes | ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
       - name: Build with Buildozer
         run: |
-          buildozer android debug || true
-          yes | ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
           buildozer android debug
 
       - name: Upload APK Artifact
@@ -58,3 +64,4 @@ jobs:
         with:
           name: AwesomeVHS-debug-apk
           path: bin/*.apk
+
