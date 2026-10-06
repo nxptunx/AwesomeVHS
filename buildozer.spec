@@ -35,7 +35,7 @@ android.permissions = CAMERA, RECORD_AUDIO, READ_EXTERNAL_STORAGE, WRITE_EXTERNA
 android.api = 33
 
 # (int) Minimum API supported
-android.minapi = 21
+android.minapi = 24
 
 # (str) Android NDK version
 android.ndk = 25b
