@@ -9,49 +9,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+        steps:
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Install System Build Dependencies
+      - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            build-essential \
-            ccache \
-            git \
-            libffi-dev \
-            libssl-dev \
-            python3-dev \
-            libltdl-dev \
-            libgstreamer1.0-dev \
-            gstreamer1.0-plugins-base \
-            gstreamer1.0-plugins-good \
-            zip \
-            unzip \
-            openjdk-17-jdk \
-            autoconf \
-            libtool \
-            pkg-config \
-            libgl1-mesa-dev \
-            libgles2-mesa-dev \
-            ffmpeg \
-            libsm6 \
-            libxext6
+          sudo apt-get install -y patch build-essential ccache git libffi-dev libssl-dev zip unzip autoconf libtool pkg-config zlib1g-dev
 
-      - name: Install Python Build Tools
+      - name: Install Buildozer and Dependencies
         run: |
-          pip install --upgrade pip setuptools buildozer cython kivy
+          pip install --upgrade pip
+          pip install buildozer cython
 
-      - name: Build APK with Buildozer
+      - name: Build with Buildozer
         run: |
-          yes | buildozer android debug
-
+          buildozer android debug
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
