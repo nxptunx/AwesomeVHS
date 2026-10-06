@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-        steps:
+    steps:
       - uses: actions/checkout@v4
 
       - name: Set up Python
@@ -20,7 +20,19 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y patch build-essential ccache git libffi-dev libssl-dev zip unzip autoconf libtool pkg-config zlib1g-dev
+          sudo apt-get install -y \
+            patch \
+            build-essential \
+            ccache \
+            git \
+            libffi-dev \
+            libssl-dev \
+            zip \
+            unzip \
+            autoconf \
+            libtool \
+            pkg-config \
+            zlib1g-dev
 
       - name: Install Buildozer and Dependencies
         run: |
@@ -30,6 +42,7 @@ jobs:
       - name: Build with Buildozer
         run: |
           buildozer android debug
+
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
